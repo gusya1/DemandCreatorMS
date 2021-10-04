@@ -6,8 +6,6 @@ from mainwindow import MainWindow
 from MSApi import MSApi
 
 
-import settings
-
 def fatal_error(message):
     QtWidgets.QMessageBox.critical(None, "Error", str(message))
     app.exit(1)
@@ -16,13 +14,16 @@ def fatal_error(message):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
+    app.setApplicationName("DemandCreatorMS")
 
     try:
-        MSApi.set_access_token(settings.MOY_SKLAD.TOKEN)
 
         window = MainWindow()
         window.show()
+
     except MSApiException as e:
+        fatal_error(e)
+    except RuntimeError as e:
         fatal_error(e)
 
     app.exec()

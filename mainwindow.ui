@@ -46,6 +46,34 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>342</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionSet_MS_token"/>
+    <addaction name="actionSet_status_blacklist_entity"/>
+   </widget>
+   <addaction name="menuSettings"/>
+  </widget>
+  <action name="actionSet_MS_token">
+   <property name="text">
+    <string>Set MS token</string>
+   </property>
+  </action>
+  <action name="actionSet_status_blacklist_entity">
+   <property name="text">
+    <string>Set status blacklist entity</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
