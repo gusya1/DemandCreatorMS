@@ -90,6 +90,8 @@ class MainWindow(QMainWindow):
     @QtCore.pyqtSlot()
     def on_set_ms_token_triggered(self):
         ms_token, action = QInputDialog.getText(self, "Enter MS token", "token")
+        if not action:
+            return
         self.config[self.MS_SETTINGS_SECTION][self.MS_AUCH_TOKEN_OPTION] = ms_token
         MSApi.set_access_token(ms_token)
         self.__write_config()
@@ -100,6 +102,8 @@ class MainWindow(QMainWindow):
             entity_names_list = list(entity.get_name() for entity in MSApi.get_company_settings().gen_custom_entities())
             entity_name, action = QInputDialog.getItem(self, "Choose project blacklist entity", "Entity:",
                                                        entity_names_list, editable=False)
+            if not action:
+                return
             self.config[self.MS_SETTINGS_SECTION][self.MS_PROJ_BLACKLIST_ENTITY_OPTION] = entity_name
             self.__fill_project_blacklist()
             self.__write_config()
