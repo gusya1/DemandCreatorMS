@@ -21,7 +21,6 @@ class SettingsDialog(QDialog):
         settings_file = open(self.settings_path, "r")
         settings.SETTINGS = json.load(settings_file)
         ms_auch_token = settings.SETTINGS.get("ms_auch_token")
-        if ms_auch_token:
 
 
 
