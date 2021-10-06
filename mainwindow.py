@@ -1,7 +1,7 @@
 import datetime
 
-from MSApi import DateTimeFilter, MSApi, CustomerOrder, create_demand, get_demand_template_by_customer_order, \
-    MSApiException, Expand
+from MSApi import DateTimeFilter, MSApi, MSApiException, Expand, Store, Filter
+from MSApi.documents.ProcessingOrder import ProcessingOrder, Processing
 from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QMainWindow
 # from PyQt5.QtCore import QMarginsF
 from ui.ui_mainwindow import Ui_MainWindow
 from settings import MOY_SKLAD
+
 
 class MainWindow(QMainWindow):
 
@@ -28,12 +29,18 @@ class MainWindow(QMainWindow):
             QtCore.QStandardPaths.StandardLocation.DownloadLocation)
 
         for entity in MSApi.get_company_settings().gen_custom_entities():
-            if entity.get_name() != MOY_SKLAD.PROJECTS_BLACKLIST_ENTITY:
+            if entity.get_name() != MOY_SKLAD.PROCESSING_PLAN_BLACKLIST_ENTITY:
                 continue
-            self.project_blacklist = list(entity_elem.get_name() for entity_elem in entity.gen_elements())
+            self.processing_plan_blacklist = list(entity_elem.get_name() for entity_elem in entity.gen_elements())
             break
         else:
-            raise RuntimeError("Entity {} not found!".format(MOY_SKLAD.PROJECTS_BLACKLIST_ENTITY))
+            raise RuntimeError("Entity {} not found!".format(MOY_SKLAD.PROCESSING_PLAN_BLACKLIST_ENTITY))
+
+        for store in Store.generate(filters=Filter.eq('name', MOY_SKLAD.STORE_NAME)):
+            self.store = store
+            break
+        else:
+            raise RuntimeError("Store {} not found!".format(MOY_SKLAD.STORE_NAME))
 
     @QtCore.pyqtSlot()
     def on_btnGenerateClicked(self):
@@ -46,20 +53,23 @@ class MainWindow(QMainWindow):
             date_filter += DateTimeFilter.lt('deliveryPlannedMoment', dt + datetime.timedelta(days=1))
 
             total_count = 0
-            for customer_order in MSApi.gen_customer_orders(filters=date_filter, expand=Expand("project")):
-                customer_order: CustomerOrder
-                if next(customer_order.gen_demands(), None) is not None:
+            for processing_order in ProcessingOrder.generate(filters=date_filter, expand=Expand("processingPlan")):
+                processing_order: ProcessingOrder
+                if next(processing_order.gen_processings(), None) is not None:
                     continue
-                project = customer_order.get_project()
-                if project is not None:
-                    if project.get_name() in self.project_blacklist:
-                        continue
+                processing_plan = processing_order.get_processing_plan()
+                if processing_plan.get_name() in self.processing_plan_blacklist:
+                    continue
                 total_count += 1
                 try:
-                    create_demand(get_demand_template_by_customer_order(customer_order))
+                    template = Processing.get_template_by_processing_order(processing_order)
+                    template.get_json()["productsStore"] = {'meta': self.store.get_meta().get_json()}
+                    template.get_json()["materialsStore"] = {'meta': self.store.get_meta().get_json()}
+                    template.get_json()["quantity"] = processing_order.get_quantity()
+                    Processing.create(template)
                 except MSApiException as e:
-                    error_list.append("Demand for {} customer order create failed: {}"
-                                      .format(customer_order.get_name(), str(e)))
+                    error_list.append("Processing for {} processing order create failed: {}"
+                                      .format(processing_order.get_name(), str(e)))
 
             if len(error_list) != 0:
                 error_list_str = ""
