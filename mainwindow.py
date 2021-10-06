@@ -3,13 +3,9 @@ import os
 
 from MSApi import DateTimeFilter, MSApi, CustomerOrder, create_demand, get_demand_template_by_customer_order, \
     MSApiException, Filter, Expand
-from PyQt5 import uic, QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QStandardPaths
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QInputDialog
-# from PyQt5 import QtGui
-# from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
-# from PyQt5.QtCore import QMarginsF
 from ui.ui_mainwindow import Ui_MainWindow
 import configparser
 
@@ -31,20 +27,11 @@ class MainWindow(QMainWindow):
 
         self.ui.actionSet_MS_token.triggered.connect(self.on_set_ms_token_triggered)
         self.ui.actionSet_status_blacklist_entity.triggered.connect(self.on_set_blacklist_entity_triggered)
+        self.ui.actionCreate_Processing_settings_2.triggered.connect(self.on_create_processing_settings_triggered)
 
         self.ui.btnGenerate.clicked.connect(self.on_btnGenerateClicked)
 
-        try:
-            settings_dir_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
-            if not os.path.exists(settings_dir_path):
-                os.makedirs(settings_dir_path)
-            self.settings_path = settings_dir_path + "/settings.ini"
 
-            if not os.path.exists(self.settings_path):
-                file = open(self.settings_path, "w")
-                file.close()
-        except OSError as e:
-            raise RuntimeError("Settings file create failed: {}".format(str(e)))
 
         self.config = configparser.ConfigParser()
         self.config.read_dict({self.MS_SETTINGS_SECTION: {
@@ -86,6 +73,10 @@ class MainWindow(QMainWindow):
         file = open(self.settings_path, "w")
         self.config.write(file)
         file.close()
+
+    @QtCore.pyqtSlot()
+    def on_create_processing_settings_triggered(self):
+        dialog = CreateProcessingSettingsDialog(self)
 
     @QtCore.pyqtSlot()
     def on_set_ms_token_triggered(self):

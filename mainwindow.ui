@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>342</width>
-    <height>249</height>
+    <width>332</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,35 +34,58 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="1" column="0">
+    <item row="1" column="1">
      <widget class="QPushButton" name="btnGenerate">
       <property name="text">
        <string>Generate</string>
       </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
-    <item row="0" column="0">
+    <item row="1" column="0">
+     <widget class="QToolButton" name="toolButton">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="resources.qrc">
+        <normaloff>:/prev_arrow/x32</normaloff>:/prev_arrow/x32</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonIconOnly</enum>
+      </property>
+      <property name="autoRaise">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
      <widget class="QCalendarWidget" name="calendarWidget"/>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>342</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-    <addaction name="actionSet_MS_token"/>
-    <addaction name="actionSet_status_blacklist_entity"/>
-   </widget>
-   <addaction name="menuSettings"/>
   </widget>
   <action name="actionSet_MS_token">
    <property name="text">
@@ -74,9 +97,18 @@
     <string>Set status blacklist entity</string>
    </property>
   </action>
+  <action name="actionProducts_store">
+   <property name="text">
+    <string>Products store</string>
+   </property>
+  </action>
+  <action name="actionCreate_Processing_settings_2">
+   <property name="text">
+    <string>Create Processing settings</string>
+   </property>
+  </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>

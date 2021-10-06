@@ -2,7 +2,8 @@
 from MSApi import MSApi, MSApiException
 from PyQt5 import QtWidgets
 import sys
-from mainwindow import MainWindow
+
+from LauncherDialog import LauncherDialog
 from MSApi import MSApi
 
 
@@ -17,9 +18,8 @@ if __name__ == '__main__':
     app.setApplicationName("DemandCreatorMS")
 
     try:
-
-        window = MainWindow()
-        window.show()
+        launcher = LauncherDialog()
+        launcher.show()
 
     except MSApiException as e:
         fatal_error(e)

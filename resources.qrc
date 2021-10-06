@@ -2,4 +2,18 @@
   <qresource prefix="icons">
     <file alias="mainwindow">pictures/icon.ico</file>
   </qresource>
+  <qresource prefix="prev_arrow">
+    <file alias="x32">pictures/x32/004-previous.png</file>
+  </qresource>
+  <qresource prefix="demands_creator">
+    <file alias="x256">pictures/x256/002-delivery-time.png</file>
+  </qresource>
+  <qresource prefix="processing_creator">
+    <file>pictures/x256/003-data-processing.png</file>
+  </qresource>
+  <qresource prefix="settings">
+    <file alias="x64">pictures/x64/001-gear.png</file>
+    <file alias="x32">pictures/x32/001-gear.png</file>
+    <file alias="x256">pictures/x256/001-gear.png</file>
+  </qresource>
 </RCC>
