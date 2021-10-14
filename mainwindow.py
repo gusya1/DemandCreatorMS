@@ -65,7 +65,13 @@ class MainWindow(QMainWindow):
                     template = Processing.get_template_by_processing_order(processing_order)
                     template.get_json()["productsStore"] = {'meta': self.store.get_meta().get_json()}
                     template.get_json()["materialsStore"] = {'meta': self.store.get_meta().get_json()}
-                    template.get_json()["quantity"] = processing_order.get_quantity()
+                    po_quantity = processing_order.get_quantity()
+                    template.get_json()["quantity"] *= po_quantity
+                    for product in template.get_json()["products"]["rows"]:
+                        product["quantity"] *= po_quantity
+                    for material in template.get_json()["materials"]["rows"]:
+                        material["quantity"] *= po_quantity
+
                     Processing.create(template)
                 except MSApiException as e:
                     error_list.append("Processing for {} processing order create failed: {}"
